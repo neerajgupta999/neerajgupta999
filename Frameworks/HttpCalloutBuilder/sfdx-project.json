@@ -1,0 +1,19 @@
+{
+  "packageDirectories": [
+
+    {
+      "path": "src" 
+    },
+    {
+      "path": "src/frameworks/outbound-integration" 
+    },
+    {
+      "path": "src/force-app",
+      "default": true
+    }
+  ],
+  "name": "EcomValidation",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "58.0"
+}

@@ -1,0 +1,124 @@
+
+
+FSC Account Open
+-> Account Owner
+-> Beneficiary
+-> Type of Account
+-> Transfer (Source Account)
+-> Terms & Conditions (Signature)
+
+
+
+Template 
+Beneficiary - Person
+
+Beneficary -{erson}
+
+
+Forms
+Owners
+
+
+
+Admin
+-> Shell Financial Account Genrated
+-> Data Intake
+-> Person Account
+-> Custom Object - Bene
+-> Custom Object - Source Account
+
+
+Person -> Address update (FA 4)
+Financial Account -> Address Update
+
+
+
+Extract Config -> Each Workflow
+Related Data
+FinancialAccount
+FA.Bene
+FA.Source
+FA.Roles.Person1 (Address, Social, Phones, emails)
+FA.Roles.Person2
+
+UnRelated Data
+MasterAccountId
+Advisor (Manage Access)
+
+Fee Specifc
+
+Extract Cofnig
+Name -> Account Opening From Financial Account
+input {FinancialAccountId}
+configs {
+    [
+        {
+            Name : "Bene" (5)
+            Object : Contact,
+            filter: {RecordType = '', ParentId = %FinancialAccountId%},
+            outputFields: {5}
+        },{
+            Object : FinancialAccount,
+            filter: {RecordType = '', ParentId = %FinancialAccountId%}
+        },
+        {
+            Object : Address,
+            filter: {RecordType = '', ParentId = %bene.Id%}
+        }
+    ]
+},
+
+
+FA {
+    bene [{
+        person1,
+        person2
+    }]
+}
+
+
+Admin 
+Extract -> Filter Crieria
+Mapping -> 
+Source                      ->          Target
+fa.Name                     ->          acc1.O.Name
+fa.bene{1}.FirstName        ->          acc1.bene1FName             -> Required
+fa.bene{2}.FirstName        ->          acc2.bene1FName
+
+
+
+Extract Config
+Mapping Config
+
+
+
+
+5 different forms. - Chase Savings Account, Custom Forms
+
+
+AccountOpeningFormMapping
+
+
+
+
+Open Savings Account Bundle (100)
+-> Mandatory Forms 5 
+-> Transfer (Optional)
+-> FAID
+
+-> Preview
+
+
+
+public class Extract {
+    string name, 
+    List<InputAttributes with Key>
+    List<fieldsToExtract, Filter with key from input, required (message)>
+    List<outputFields>
+}
+
+
+
+Actor1
+Actor2
+Client
