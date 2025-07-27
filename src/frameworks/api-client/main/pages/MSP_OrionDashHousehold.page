@@ -1,0 +1,16 @@
+<apex:page controller="MSP_OrionVFController" action="{!getDashboardLinkHousehold}">
+    <apex:form >
+        <apex:pageMessages />
+    </apex:form>
+    <style>
+        .parent-containerHousehold {
+            flex-grow: 1;
+            overflow-y: hidden;
+            height: 98vh;
+        }
+    </style>
+    
+    <div class="parent-containerHousehold">
+        <apex:iframe id="dynamicIframeHousehold"  src="{!HTMLENCODE(JSENCODE(url))}" width="100%" height="100%" scrolling="false"  frameborder="false" />
+    </div>
+</apex:page>

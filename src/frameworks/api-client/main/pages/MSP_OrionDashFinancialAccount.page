@@ -1,0 +1,7 @@
+<apex:page controller="MSP_OrionVFController" action="{!getDashboardLinkFinAccount}">
+    <apex:form >
+        <apex:pageMessages />
+    </apex:form>
+    
+    <apex:iframe src="{!url}" height="1000px"/>
+</apex:page>
