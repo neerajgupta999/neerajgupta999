@@ -1,0 +1,21 @@
+{
+  "packageDirectories": [
+    {
+      "path": "src"
+    }, 
+    {
+      "path": "src/force-app",
+      "default": true
+    }, 
+    {
+      "path": "src/frameworks"
+    }, 
+    {
+      "path": "src/frameworks/HttpCalloutBuilder"
+    }
+  ],
+  "name": "NGPlayGround",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "62.0"
+}
