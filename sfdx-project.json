@@ -1,17 +1,24 @@
 {
   "packageDirectories": [
     {
-      "path": "src"
-    }, 
+      "path": "src",
+      "default": false
+    },
     {
       "path": "src/force-app",
       "default": true
-    }, 
+    },
     {
-      "path": "src/frameworks"
-    }, 
+      "path": "src/frameworks",
+      "default": false
+    },
     {
-      "path": "src/frameworks/HttpCalloutBuilder"
+      "path": "src/frameworks/HttpCalloutBuilder",
+      "default": false
+    },
+    {
+      "path": "src/other-folder",
+      "default": false
     }
   ],
   "name": "NGPlayGround",
