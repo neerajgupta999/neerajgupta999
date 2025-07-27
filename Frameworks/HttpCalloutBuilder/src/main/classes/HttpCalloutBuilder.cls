@@ -1,7 +1,7 @@
 /**
  * @description       : Represents a builder for making HTTP callouts.
- * @last modified on  : 05-05-2023
- * @last modified by  : Neeraj Gupta
+ * @last modified on  : 07-26-2025
+ * @author            : Neeraj Gupta
 **/
 public with sharing class HttpCalloutBuilder implements IHttpCalloutBuilder {
     public class UnableToParseException extends Exception {}
@@ -63,6 +63,13 @@ public with sharing class HttpCalloutBuilder implements IHttpCalloutBuilder {
         return this;
     }
 
+    public HttpCalloutBuilder setHeaders(Map<String, String> headers) {
+        for (String key : headers.keySet()) {
+            request.setHeader(key, headers.get(key));
+        }
+        return this;
+    }
+
     public HttpCalloutBuilder setMethod(String method) {
         request.setMethod(method);
         return this;
@@ -73,22 +80,46 @@ public with sharing class HttpCalloutBuilder implements IHttpCalloutBuilder {
         return this;
     }
 
+    private void validateRequest() {
+        if (request == null || httpInstance == null) {
+            throw new CalloutException(NULL_REQUEST_MESSAGE);
+        }
+        if (String.isBlank(request.getEndpoint())) {
+            throw new CalloutException('Endpoint is required.');
+        }
+        if (String.isBlank(request.getMethod())) {
+            throw new CalloutException('HTTP method is required.');
+        }
+    }
+
+    public HttpCalloutBuilder addQueryParam(String key, String value) {
+        String endpoint = request.getEndpoint();
+        if (endpoint == null) endpoint = '';
+        endpoint += (endpoint.contains('?') ? '&' : '?') + key + '=' + EncodingUtil.urlEncode(value, 'UTF-8');
+        request.setEndpoint(endpoint);
+        return this;
+    }
+
     // Send the HTTP request and handle the response
     public HttpCalloutResponse send() {
-        //Todo: Add Method to Validate Request
-        try {
-            httpResponseInstance.response = httpInstance.send(request);
-
-            if (httpResponseInstance.response.getStatusCode() >= 200 && httpResponseInstance.response.getStatusCode() < 300) {
-                handleSuccess();
-            } else {
-                handleException(new CalloutException(NOT_200_RESPONSE));
+        Integer attempt = 0;
+        Exception lastException;
+        while (attempt <= maxRetries) {
+            try {
+                validateRequest();
+                httpResponseInstance.response = httpInstance.send(request);
+                if (httpResponseInstance.response.getStatusCode() >= 200 && httpResponseInstance.response.getStatusCode() < 300) {
+                    handleSuccess();
+                    return httpResponseInstance;
+                } else {
+                    lastException = new CalloutException(NOT_200_RESPONSE);
+                }
+            } catch (Exception ex) {
+                lastException = ex;
             }
-
-            return httpResponseInstance;
-        } catch (Exception ex) {
-            return handleException(new CalloutException(HTTP_CALL_FAILED_MESSAGE + ex.getMessage() + STACK_TRACE_PREFIX + ex.getStackTraceString()));
+            attempt++;
         }
+        return handleException(new CalloutException(HTTP_CALL_FAILED_MESSAGE + lastException.getMessage()));
     }
 
     // Handle successful response 
@@ -116,5 +147,11 @@ public with sharing class HttpCalloutBuilder implements IHttpCalloutBuilder {
             return handleException(new UnableToParseException(ex));
         }
         return httpResponseInstance;
+    }
+
+    private Integer maxRetries = 0;
+    public HttpCalloutBuilder setMaxRetries(Integer retries) {
+        this.maxRetries = retries;
+        return this;
     }
 }

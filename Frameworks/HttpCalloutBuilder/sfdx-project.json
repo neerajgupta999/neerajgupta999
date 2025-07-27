@@ -1,18 +1,11 @@
 {
   "packageDirectories": [
-
     {
-      "path": "src" 
-    },
-    {
-      "path": "src/frameworks/outbound-integration" 
-    },
-    {
-      "path": "src/force-app",
+      "path": "src",
       "default": true
     }
   ],
-  "name": "EcomValidation",
+  "name": "NGPlayGround",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "58.0"
